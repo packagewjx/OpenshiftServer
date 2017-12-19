@@ -2,6 +2,9 @@ package ibm.wjx.osserver.shell;
 
 
 import ibm.wjx.osserver.shell.resultparser.ResultParser;
+import ibm.wjx.osserver.util.ExceptionLogUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +19,12 @@ public abstract class BaseShellCommand<DataType> {
     public static final int RETURN_CODE_INTERRUPTED_EXCEPTION = -1001;
     public static final int EXEC_TIMEOUT = 300;
     public static final int RETURN_CODE_TIMEOUT = -1002;
-    private static final int PROCESS_OK = 0;
+    public static final int PROCESS_OK = 0;
+    /**
+     * Subclass Should Replace this Logger to its own logger in order to have a more meaningful log.
+     */
+    protected static Logger logger = LoggerFactory.getLogger(BaseShellCommand.class);
+
 
     private ResultParser<DataType> resultParser;
 
@@ -31,14 +39,27 @@ public abstract class BaseShellCommand<DataType> {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("Shell Command: Envs: ");
-        for (String env : getEnvs()) {
-            builder.append(env).append(", ");
+        builder.append("ShellCommand {");
+        Set<String> envs = getEnvs();
+        if (envs != null && envs.size() != 0) {
+            builder.append("Envs: ");
+            for (String env : getEnvs()) {
+                builder.append(env).append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());
+            builder.append("; ");
         }
-        builder.append(" Command String: ");
-        for (String cmd : getCmdArray()) {
-            builder.append(cmd).append(' ');
+        List<String> cmdArray = getCmdArray();
+        if (cmdArray != null && cmdArray.size() != 0) {
+            builder.append("Command String: \"");
+            for (String cmd : getCmdArray()) {
+                builder.append(cmd).append(' ');
+            }
+            builder.deleteCharAt(builder.length() - 1).append('\"');
+        } else {
+            logger.warn("No Command Input");
         }
+        builder.append('}');
         return builder.toString();
     }
 
@@ -57,10 +78,11 @@ public abstract class BaseShellCommand<DataType> {
         Set<String> envs = getEnvs();
         //check the parameters
         if (cmdArray == null || cmdArray.size() == 0) {
-            //TODO log err output
+            logger.error("No Command Input, Exiting");
             return null;
         }
         if (envs == null) {
+            logger.info("No Environment Variables Input");
             envs = new HashSet<>(2);
         }
         //convert them
@@ -71,7 +93,7 @@ public abstract class BaseShellCommand<DataType> {
 
         ShellCommandResult<DataType> result = new ShellCommandResult<>();
         try {
-            //TODO should output process stdout to log
+            logger.info("Executing {}", toString());
             Process process = Runtime.getRuntime().exec(cmdStringArray, envStringArray);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -79,16 +101,17 @@ public abstract class BaseShellCommand<DataType> {
             StringBuilder errStringBuilder = new StringBuilder();
             String line = null;
             String errLine = null;
-            //TODO should output to log
             //read stdout and stderr at the same time
             boolean eof = false;
             while (!eof) {
                 eof = true;
                 if (null != (line = reader.readLine())) {
+                    logger.debug(line);
                     okStringBuilder.append(line).append('\n');
                     eof = false;
                 }
                 if (null != (errLine = errReader.readLine())) {
+                    logger.debug(line);
                     errStringBuilder.append(errLine).append('\n');
                     eof = false;
                 }
@@ -96,31 +119,33 @@ public abstract class BaseShellCommand<DataType> {
             boolean finished = process.waitFor(EXEC_TIMEOUT, TimeUnit.SECONDS);
             if (finished) {
                 if (process.exitValue() == PROCESS_OK) {
+                    logger.info("Command Executed Successfully");
                     String rawResult = okStringBuilder.toString();
                     DataType data = resultParser.parse(rawResult);
                     result.setData(data);
                     result.setReturnCode(PROCESS_OK);
                     result.setRawResult(rawResult);
                 } else {
-                    //TODO should output error log
+                    logger.error("Command exited with code {}. Error Message is: {}", process.exitValue(), errStringBuilder.toString());
                     result.setData(null);
                     result.setRawResult(errStringBuilder.toString());
                     result.setReturnCode(process.exitValue());
                 }
             } else {
-                //TODO should output error log
+                logger.error("The Command did not finished in {} second, exit waiting.", EXEC_TIMEOUT);
                 result.setRawResult("The Command did not finished in " + EXEC_TIMEOUT + " second");
                 result.setReturnCode(RETURN_CODE_TIMEOUT);
                 result.setData(null);
             }
-            //TODO should output error log
         } catch (IOException e) {
-            e.printStackTrace();
+            String trace = ExceptionLogUtil.getStacktrace(e);
+            logger.error("Caught IO Exception:\n {}", trace);
             result.setReturnCode(RETURN_CODE_IO_EXCEPTION);
             result.setRawResult(e.getMessage());
             result.setData(null);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            String trace = ExceptionLogUtil.getStacktrace(e);
+            logger.error("Caught InterruptedException:\n {}", trace);
             result.setReturnCode(RETURN_CODE_INTERRUPTED_EXCEPTION);
             result.setRawResult(e.getMessage());
             result.setData(null);
