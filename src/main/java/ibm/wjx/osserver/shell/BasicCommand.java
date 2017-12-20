@@ -2,6 +2,7 @@ package ibm.wjx.osserver.shell;
 
 import ibm.wjx.osserver.shell.resultparser.ResultParser;
 import ibm.wjx.osserver.util.ConfigurationUtils;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +15,10 @@ import java.util.Set;
  * Description: ${Description}
  */
 public class BasicCommand<T> extends BaseShellCommand<T>{
+    static {
+        logger = LoggerFactory.getLogger(BasicCommand.class);
+    }
+
     public BasicCommand(ResultParser<T> resultParser) {
         super(resultParser);
     }

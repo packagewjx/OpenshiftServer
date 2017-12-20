@@ -3,8 +3,11 @@ package shell;
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
 import ibm.wjx.osserver.shell.resultparser.ResultParser;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
+
+import javax.validation.constraints.AssertTrue;
 
 import static org.junit.Assert.*;
 
@@ -25,8 +28,9 @@ public class BaseShellCommandTest {
         ShellCommandResult<String> result = new TestCommand("ls -l").execute();
         assertNotNull(result);
         assertEquals(0, result.getReturnCode());
-        assertNotEquals(0, result.getData().length());
-        System.out.println(result.getData());
+        Assert.assertTrue(result.getData().isPresent());
+        assertNotEquals(0, result.getData().get().length());
+        System.out.println(result.getData().get());
     }
 
     @Test

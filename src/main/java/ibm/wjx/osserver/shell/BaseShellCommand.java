@@ -115,7 +115,7 @@ public abstract class BaseShellCommand<DataType> {
                     eof = false;
                 }
                 if (null != (errLine = errReader.readLine())) {
-                    logger.debug(line);
+                    logger.debug(errLine);
                     errStringBuilder.append(errLine).append('\n');
                     eof = false;
                 }
@@ -124,6 +124,8 @@ public abstract class BaseShellCommand<DataType> {
             if (finished) {
                 if (process.exitValue() == PROCESS_OK) {
                     logger.info("Command Executed Successfully");
+                    //remove the last line separator
+                    okStringBuilder.deleteCharAt(okStringBuilder.length() - 1);
                     String rawResult = okStringBuilder.toString();
                     result.setReturnCode(PROCESS_OK);
                     result.setRawResult(rawResult);
@@ -132,6 +134,8 @@ public abstract class BaseShellCommand<DataType> {
                 } else {
                     logger.error("Command exited with code {}. Error Message is: {}", process.exitValue(), errStringBuilder.toString());
                     result.setData(null);
+                    //remove the last line separator
+                    errStringBuilder.deleteCharAt(errStringBuilder.length() - 1);
                     result.setRawResult(errStringBuilder.toString());
                     result.setReturnCode(process.exitValue());
                 }

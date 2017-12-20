@@ -14,6 +14,7 @@ public class LoginCommandTest {
     @Test
     public void testLogin() {
         ShellCommandResult<Boolean> result = new LoginCommand().execute();
-        Assert.assertTrue(result.getData());
+        Assert.assertTrue(result.getData().isPresent());
+        Assert.assertTrue(result.getData().get());
     }
 }

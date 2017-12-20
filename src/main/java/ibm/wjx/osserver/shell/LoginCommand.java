@@ -2,9 +2,9 @@ package ibm.wjx.osserver.shell;
 
 import ibm.wjx.osserver.shell.resultparser.ResultParser;
 import ibm.wjx.osserver.util.ConfigurationUtils;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Create Date: 12/20/17
@@ -12,10 +12,13 @@ import java.util.Set;
  * Description: ${Description}
  */
 public class LoginCommand extends BasicCommand<Boolean> {
-    private static final Parser parser = new Parser();
+    private static final Parser PARSER = new Parser();
+    static {
+        logger = LoggerFactory.getLogger(LoginCommand.class);
+    }
 
     public LoginCommand() {
-        super(parser);
+        super(PARSER);
     }
 
     @Override
