@@ -1,3 +1,5 @@
+package shell;
+
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
 import ibm.wjx.osserver.shell.resultparser.ResultParser;
