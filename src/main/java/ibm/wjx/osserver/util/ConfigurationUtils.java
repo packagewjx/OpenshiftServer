@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * Create Date: 12/20/17
  * Author: <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
- * Description: ${Description}
+ * Description: A Utility class to read configurations.
  */
 public class ConfigurationUtils {
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationUtils.class);
@@ -23,6 +23,8 @@ public class ConfigurationUtils {
             //This Exception Should Not Happen!
             e.printStackTrace();
         }
+
+        //TODO Load environment variables to override the configurations.
     }
 
     public static String getConfig(String key) {

@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Abstract Base Class for a shell command, use template method to execute a command.
+ * @param <DataType>
+ */
 public abstract class BaseShellCommand<DataType> {
     public static final int RETURN_CODE_IO_EXCEPTION = -1000;
     public static final int RETURN_CODE_INTERRUPTED_EXCEPTION = -1001;
@@ -121,10 +125,10 @@ public abstract class BaseShellCommand<DataType> {
                 if (process.exitValue() == PROCESS_OK) {
                     logger.info("Command Executed Successfully");
                     String rawResult = okStringBuilder.toString();
-                    DataType data = resultParser.parse(rawResult);
-                    result.setData(data);
                     result.setReturnCode(PROCESS_OK);
                     result.setRawResult(rawResult);
+                    DataType data = resultParser.parse(rawResult);
+                    result.setData(data);
                 } else {
                     logger.error("Command exited with code {}. Error Message is: {}", process.exitValue(), errStringBuilder.toString());
                     result.setData(null);
