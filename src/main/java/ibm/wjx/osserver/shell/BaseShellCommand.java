@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract Base Class for a shell command, use template method to execute a command.
- * @param <DataType>
+ * @param <DataType> The Return Object Type.
  */
 public abstract class BaseShellCommand<DataType> {
     public static final int RETURN_CODE_IO_EXCEPTION = -1000;

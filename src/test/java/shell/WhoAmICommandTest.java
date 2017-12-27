@@ -1,6 +1,6 @@
 package shell;
 
-import ibm.wjx.osserver.shell.WhoAmICommand;
+import ibm.wjx.osserver.shell.oc.WhoAmICommand;
 import org.junit.Assert;
 import org.junit.Test;
 

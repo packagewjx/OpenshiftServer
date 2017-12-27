@@ -1,4 +1,4 @@
-package ibm.wjx.osserver.shell;
+package ibm.wjx.osserver.shell.oc;
 
 import ibm.wjx.osserver.shell.resultparser.ResultParser;
 import ibm.wjx.osserver.util.ConfigurationUtils;
@@ -8,10 +8,10 @@ import java.util.List;
 
 /**
  * Create Date: 12/20/17
- * Author: <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
+ * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: ${Description}
  */
-public class LoginCommand extends BasicCommand<Boolean> {
+public class LoginCommand extends BaseOcCommand<Boolean> {
     private static final Parser PARSER = new Parser();
     static {
         logger = LoggerFactory.getLogger(LoginCommand.class);

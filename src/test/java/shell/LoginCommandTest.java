@@ -1,6 +1,6 @@
 package shell;
 
-import ibm.wjx.osserver.shell.LoginCommand;
+import ibm.wjx.osserver.shell.oc.LoginCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
 import org.junit.Assert;
 import org.junit.Test;

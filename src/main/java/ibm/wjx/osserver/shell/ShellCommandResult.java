@@ -2,14 +2,16 @@ package ibm.wjx.osserver.shell;
 
 
 
-import jdk.internal.jline.internal.Nullable;
 
 import java.util.Optional;
 
+/**
+ * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
+ */
 public class ShellCommandResult<DataType> {
     private int returnCode;
     private String rawResult;
-    @Nullable private DataType data;
+    private DataType data;
 
     public int getReturnCode() {
         return returnCode;
@@ -35,7 +37,16 @@ public class ShellCommandResult<DataType> {
         return Optional.ofNullable(data);
     }
 
-    public void setData(@Nullable DataType data) {
+    public void setData(DataType data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "ShellCommandResult{" +
+                "returnCode=" + returnCode +
+                ", rawResult='" + rawResult + '\'' +
+                ", data=" + data +
+                '}';
     }
 }
