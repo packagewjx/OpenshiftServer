@@ -9,7 +9,7 @@ import ibm.wjx.osserver.shell.ShellCommandResult;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
-public interface CommandCompeteHandler {
+public interface CommandCompleteHandler {
     /**
      * This method should handle both success and fail situation when a command completed.
      *

@@ -9,5 +9,6 @@ package ibm.wjx.osserver.constant;
 public class Kind {
     public static final String LIST = "List";
     public static final String USER = "User";
+    public static final String IDENTITY = "Identity";
     public static final String GROUP = "Group";
 }

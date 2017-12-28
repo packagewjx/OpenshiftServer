@@ -8,31 +8,22 @@ import java.util.List;
  * Create Date: 12/28/17
  *
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
- * Description:
+ * Description: Create from file, like "oc create -f <filename>"
  */
-public class CreateUserCommand extends BaseCreateCommand<String> {
-    private String username;
+public class CreateFileCommand extends BaseCreateCommand<String> {
 
+    private String path;
 
-    public CreateUserCommand(String username) {
+    protected CreateFileCommand(String path) {
         super(RawStringParser.getInstance());
-        this.username = username;
-    }
-
-    public String getUsername() {
-
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+        this.path = path;
     }
 
     @Override
     protected List<String> getCmdArray() {
         List<String> cmdArray = super.getCmdArray();
-        cmdArray.add("user");
-        cmdArray.add(username);
+        cmdArray.add("-f");
+        cmdArray.add(path);
         return cmdArray;
     }
 }
