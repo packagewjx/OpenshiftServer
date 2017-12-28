@@ -24,7 +24,7 @@ public class StringCommand extends BaseShellCommand<String> {
     }
 
     public StringCommand(String command) {
-        super(new RawStringParser());
+        super(RawStringParser.getInstance());
         this.command = command;
         this.envs = new HashMap<>();
     }

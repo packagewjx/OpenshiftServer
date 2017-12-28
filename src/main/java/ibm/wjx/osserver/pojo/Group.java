@@ -9,8 +9,23 @@ import java.util.Set;
  * Description:
  */
 public class Group extends BaseResult {
-
     private Set<String> users;
 
+    public Set<String> getUsers() {
+        return users;
+    }
 
+    public void setUsers(Set<String> users) {
+        this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "users=" + users +
+                ", apiVersion='" + apiVersion + '\'' +
+                ", kind='" + kind + '\'' +
+                ", metadata=" + metadata +
+                '}';
+    }
 }

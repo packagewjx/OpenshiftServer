@@ -6,6 +6,20 @@ package ibm.wjx.osserver.shell.resultparser;
  * Description: A Simple Class that do nothing, just return rawResult for simple command.
  */
 public class RawStringParser implements ResultParser<String> {
+    private static RawStringParser instance = null;
+
+    static {
+        instance = new RawStringParser();
+    }
+
+    public static RawStringParser getInstance() {
+        return instance;
+    }
+
+    private RawStringParser() {
+    }
+
+
     @Override
     public String parse(String rawResult) {
         return rawResult;

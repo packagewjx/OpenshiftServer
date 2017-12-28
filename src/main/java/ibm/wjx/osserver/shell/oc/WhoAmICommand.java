@@ -16,7 +16,7 @@ public class WhoAmICommand extends BaseOcCommand<String> {
         logger = LoggerFactory.getLogger(WhoAmICommand.class);
     }
     public WhoAmICommand() {
-        super(new RawStringParser());
+        super(RawStringParser.getInstance());
     }
 
     @Override

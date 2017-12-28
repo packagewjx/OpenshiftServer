@@ -17,6 +17,9 @@ public class User extends BaseResult {
         return "User{" +
                 "identities=" + identities +
                 ", groups=" + groups +
+                ", apiVersion='" + apiVersion + '\'' +
+                ", kind='" + kind + '\'' +
+                ", metadata=" + metadata +
                 '}';
     }
 

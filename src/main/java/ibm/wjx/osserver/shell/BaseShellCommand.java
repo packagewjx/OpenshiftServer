@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class BaseShellCommand<DataType> {
     public static final int RETURN_CODE_IO_EXCEPTION = -1000;
     public static final int RETURN_CODE_INTERRUPTED_EXCEPTION = -1001;
+    public static final int RETURN_CODE_NO_CMD = -1002;
     public static final int EXEC_TIMEOUT = 300;
     public static final int RETURN_CODE_TIMEOUT = -1002;
     public static final int PROCESS_OK = 0;
@@ -72,7 +73,12 @@ public abstract class BaseShellCommand<DataType> {
      * If the command exit successfully, the result object's return code should be 0, the data object contains the
      * parsed object and the rawString should contain the un-parsed result. Should the command failed, rawString will be
      * error output and return code will be the process error return code.
-     * Attention: Should not execute a long command using this function, this will run out of StringBuilder buffer space potentially.
+     * Attention:
+     * <ul>
+     *     <li>Should not execute a long command using this function, this will run out of StringBuilder buffer space potentially.</li>
+     *     <li>Should not execute a command that requires stdin, or user input, just input command and output result.</li>
+     * </ul>
+     *
      *
      * @return command result object, including return code, raw result string and parsed data object.
      */
@@ -80,10 +86,14 @@ public abstract class BaseShellCommand<DataType> {
         //get parameters from subclass
         List<String> cmdArray = getCmdArray();
         Set<String> envs = getEnvs();
+
+        ShellCommandResult<DataType> result = new ShellCommandResult<>();
         //check the parameters
         if (cmdArray == null || cmdArray.size() == 0) {
             logger.error("No Command Input, Exiting");
-            return null;
+            result.setReturnCode(RETURN_CODE_NO_CMD);
+            result.setRawResult("No Command Input");
+            return result;
         }
         if (envs == null) {
             logger.info("No Environment Variables Input");
@@ -95,7 +105,6 @@ public abstract class BaseShellCommand<DataType> {
         String[] envStringArray = new String[envs.size()];
         envs.toArray(envStringArray);
 
-        ShellCommandResult<DataType> result = new ShellCommandResult<>();
         try {
             logger.info("Executing {}", toString());
             Process process = Runtime.getRuntime().exec(cmdStringArray, envStringArray);
@@ -110,12 +119,12 @@ public abstract class BaseShellCommand<DataType> {
             while (!eof) {
                 eof = true;
                 if (null != (line = reader.readLine())) {
-                    logger.debug(line);
+                    logger.debug("stdout: {}", line);
                     okStringBuilder.append(line).append('\n');
                     eof = false;
                 }
                 if (null != (errLine = errReader.readLine())) {
-                    logger.debug(errLine);
+                    logger.debug("stderr: {}", errLine);
                     errStringBuilder.append(errLine).append('\n');
                     eof = false;
                 }

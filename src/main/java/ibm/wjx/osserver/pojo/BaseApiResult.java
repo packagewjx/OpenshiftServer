@@ -11,20 +11,12 @@ import java.util.List;
  * Description: get command api returned result contains.
  */
 public class BaseApiResult<T> extends BaseResult {
-    private String resourceVersion;
-    private String selfLink;
-    private List<T> items;
+    protected String resourceVersion;
+    protected String selfLink;
+    protected List<T> items;
 
     public BaseApiResult() {
-        this.setKind(Kind.LIST);
-    }
-
-    public List<T> getItems() {
-        return items;
-    }
-
-    public void setItems(List<T> items) {
-        this.items = items;
+        this.kind = Kind.LIST;
     }
 
     public String getResourceVersion() {
@@ -43,12 +35,23 @@ public class BaseApiResult<T> extends BaseResult {
         this.selfLink = selfLink;
     }
 
+    public List<T> getItems() {
+        return items;
+    }
+
+    public void setItems(List<T> items) {
+        this.items = items;
+    }
+
     @Override
     public String toString() {
         return "BaseApiResult{" +
                 "resourceVersion='" + resourceVersion + '\'' +
                 ", selfLink='" + selfLink + '\'' +
                 ", items=" + items +
+                ", apiVersion='" + apiVersion + '\'' +
+                ", kind='" + kind + '\'' +
+                ", metadata=" + metadata +
                 '}';
     }
 }

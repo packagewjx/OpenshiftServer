@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BaseResult {
-    private String apiVersion;
-    private String kind;
-    private Metadata metadata;
+    protected String apiVersion;
+    protected String kind;
+    protected Metadata metadata;
 
     public String getApiVersion() {
         return apiVersion;
@@ -20,15 +20,6 @@ public abstract class BaseResult {
 
     public void setApiVersion(String apiVersion) {
         this.apiVersion = apiVersion;
-    }
-
-    @Override
-    public String toString() {
-        return "BaseResult{" +
-                "apiVersion='" + apiVersion + '\'' +
-                ", kind='" + kind + '\'' +
-                ", metadata=" + metadata +
-                '}';
     }
 
     public String getKind() {
@@ -45,5 +36,14 @@ public abstract class BaseResult {
 
     public void setMetadata(Metadata metadata) {
         this.metadata = metadata;
+    }
+
+    @Override
+    public String toString() {
+        return "BaseResult{" +
+                "apiVersion='" + apiVersion + '\'' +
+                ", kind='" + kind + '\'' +
+                ", metadata=" + metadata +
+                '}';
     }
 }
