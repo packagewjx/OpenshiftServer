@@ -41,6 +41,23 @@ public abstract class BaseShellCommand<DataType> {
 
     protected abstract Set<String> getEnvs();
 
+    /**
+     * override this function to do something before command execute
+     */
+    protected void beforeExecute() {}
+
+    /**
+     * override this function to do something after command executed.
+     */
+    protected void afterExecute() {}
+
+    /**
+     * override this function to do something after error occurred.
+     */
+    protected void afterError() {
+
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -83,6 +100,8 @@ public abstract class BaseShellCommand<DataType> {
      * @return command result object, including return code, raw result string and parsed data object.
      */
     public final ShellCommandResult<DataType> execute() {
+        beforeExecute();
+
         //get parameters from subclass
         List<String> cmdArray = getCmdArray();
         Set<String> envs = getEnvs();
@@ -140,6 +159,9 @@ public abstract class BaseShellCommand<DataType> {
                     result.setRawResult(rawResult);
                     DataType data = resultParser.parse(rawResult);
                     result.setData(data);
+                    //do something after success
+                    afterExecute();
+                    return result;
                 } else {
                     logger.error("Command exited with code {}. Error Message is: {}", process.exitValue(), errStringBuilder.toString());
                     result.setData(null);
@@ -167,6 +189,7 @@ public abstract class BaseShellCommand<DataType> {
             result.setRawResult(e.getMessage());
             result.setData(null);
         }
+        afterError();
         return result;
     }
 }
