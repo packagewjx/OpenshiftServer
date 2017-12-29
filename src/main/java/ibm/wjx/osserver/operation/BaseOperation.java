@@ -32,6 +32,7 @@ public abstract class BaseOperation<T> {
 
     /**
      * add a command to this operation, use DoNothingHandler.
+     *
      * @param command
      */
     protected void addCommand(BaseShellCommand command) {
@@ -46,9 +47,10 @@ public abstract class BaseOperation<T> {
     /**
      * After all command executed successfully or failed in the middle, it should do the output.
      *
+     * @param result operation command result, use to generate the final result
      * @return result that this command produce.
      */
-    protected abstract T getResult();
+    protected abstract T getResult(OperationResult<T> result);
 
     /**
      * Execute the whole operation, success when all command executed successfully. When one command failed, stop the
@@ -60,14 +62,16 @@ public abstract class BaseOperation<T> {
             logger.warn("This operation has been executed");
         }
         logger.info("Starting Operation");
+        OperationResult<T> operationResult = new OperationResult<>();
         for (int i = 0; i < commands.size(); i++) {
             logger.info("Executing Command No.{}", i + 1);
             BaseShellCommand command = commands.get(i);
             CommandCompleteHandler handler = handlers.get(i);
             ShellCommandResult result = command.execute();
+            operationResult.getCommandResults().add(result);
             boolean proceed = handler.handle(result, i == commands.size() - 1 ? null : commands.get(i + 1));
             if (!proceed) {
-                logger.info("Error occurred, breaking");
+                logger.info("No proceed, breaking");
                 break;
             }
             executed++;
@@ -75,6 +79,6 @@ public abstract class BaseOperation<T> {
         if (executed == commands.size()) {
             logger.info("Operation Completed.");
         }
-        return getResult();
+        return getResult(operationResult);
     }
 }

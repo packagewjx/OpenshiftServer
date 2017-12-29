@@ -1,6 +1,7 @@
 package ibm.wjx.osserver.operation.user;
 
 import ibm.wjx.osserver.operation.BaseOperation;
+import ibm.wjx.osserver.operation.OperationResult;
 import ibm.wjx.osserver.shell.oc.create.CreateResourceCommand;
 
 /**
@@ -9,7 +10,7 @@ import ibm.wjx.osserver.shell.oc.create.CreateResourceCommand;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: This class do something to create the user and identity in one operation.
  */
-public class CreateUserOperation extends BaseOperation<String> {
+public class CreateUserOperation extends BaseOperation<Boolean> {
     public CreateUserOperation(String username, String identityName) {
         //TODO handle errors and roll back
         addCommand(new CreateResourceCommand("user", username));
@@ -17,8 +18,9 @@ public class CreateUserOperation extends BaseOperation<String> {
         addCommand(new CreateResourceCommand("useridentitymapping", identityName, username));
     }
 
+
     @Override
-    protected String getResult() {
-        return "";
+    protected Boolean getResult(OperationResult<Boolean> result) {
+        return result.isAllOk();
     }
 }
