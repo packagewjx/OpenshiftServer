@@ -3,7 +3,9 @@ package shell;
 import ibm.wjx.osserver.pojo.BaseApiResult;
 import ibm.wjx.osserver.pojo.Group;
 import ibm.wjx.osserver.shell.ShellCommandResult;
-import ibm.wjx.osserver.shell.oc.get.GetGroupCommand;
+import ibm.wjx.osserver.shell.constant.CmdKind;
+import ibm.wjx.osserver.shell.oc.get.ApiTypeReference;
+import ibm.wjx.osserver.shell.oc.get.GetResourceObjectsCommand;
 import org.junit.Test;
 
 /**
@@ -15,7 +17,7 @@ import org.junit.Test;
 public class GetGroupCommandTest {
     @Test
     public void testGetGroupTest() {
-        ShellCommandResult<BaseApiResult<Group>> result = new GetGroupCommand().execute();
+        ShellCommandResult<BaseApiResult<Group>> result = new GetResourceObjectsCommand<Group>(new ApiTypeReference<>(), CmdKind.GROUP).execute();
         System.out.println(result);
     }
 }
