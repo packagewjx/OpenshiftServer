@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Description: All Openshift Object Contain these properties, using get command
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class BaseResult {
+public abstract class BasePojo {
     protected String apiVersion;
     protected String kind;
     protected Metadata metadata;
@@ -40,10 +40,23 @@ public abstract class BaseResult {
 
     @Override
     public String toString() {
-        return "BaseResult{" +
+        return "BasePojo{" +
                 "apiVersion='" + apiVersion + '\'' +
                 ", kind='" + kind + '\'' +
                 ", metadata=" + metadata +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BasePojo && ((BasePojo) obj).getMetadata().getUid().equals(getMetadata().getUid())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return getMetadata().getUid().hashCode();
     }
 }

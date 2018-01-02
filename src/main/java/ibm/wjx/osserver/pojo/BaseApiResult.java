@@ -10,7 +10,7 @@ import java.util.List;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: get command api returned result contains.
  */
-public class BaseApiResult<T> extends BaseResult {
+public class BaseApiResult<T> extends BasePojo {
     protected String resourceVersion;
     protected String selfLink;
     protected List<T> items;

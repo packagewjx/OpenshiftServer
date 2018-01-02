@@ -8,7 +8,7 @@ import java.util.Set;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
-public class User extends BaseResult {
+public class User extends BasePojo {
     private Set<String> identities;
     private Set<String> groups;
 

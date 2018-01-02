@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  * Create Date: 12/19/17
- * Author: <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
+ * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: ${Description}
  */
 public class JsonParser<T> implements ResultParser<T> {

@@ -2,7 +2,7 @@ package ibm.wjx.osserver.manager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import ibm.wjx.osserver.pojo.BaseResult;
+import ibm.wjx.osserver.pojo.BasePojo;
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
 import ibm.wjx.osserver.shell.oc.ReplaceCommand;
@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: A base class implementing Manager interface, providing default implementations for methods.
  */
-public abstract class BaseManager<T extends BaseResult> implements Manager<T> {
-    private static final Logger logger = LoggerFactory.getLogger(BaseManager.class);
+public abstract class BaseManager<T extends BasePojo> implements Manager<T> {
+    protected static final Logger logger = LoggerFactory.getLogger(BaseManager.class);
     private String resourceKind;
     private TypeReference<T> typeReference;
 
@@ -89,6 +89,7 @@ public abstract class BaseManager<T extends BaseResult> implements Manager<T> {
             ShellCommandResult<String> result = command.execute();
             if (result.getReturnCode() == BaseShellCommand.PROCESS_OK) {
                 logger.info("Successfully updated {} {}", resourceKind, object.getMetadata().getName());
+                logger.info("Retrieving new {}", object.getMetadata().getName());
                 T newOb = get(object.getMetadata().getName());
                 return newOb == null ? object : newOb;
             } else {

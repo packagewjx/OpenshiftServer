@@ -1,6 +1,6 @@
 package ibm.wjx.osserver.manager;
 
-import ibm.wjx.osserver.pojo.BaseResult;
+import ibm.wjx.osserver.pojo.BasePojo;
 
 /**
  * Create Date: 12/29/17
@@ -8,7 +8,7 @@ import ibm.wjx.osserver.pojo.BaseResult;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
-public interface Manager<T extends BaseResult> {
+public interface Manager<T extends BasePojo> {
     /**
      * Create the object from a data object, use "oc create -f <file>" command to do this.
      *
