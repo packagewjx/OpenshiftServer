@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Description:
  */
 public class JsonUtil {
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static ObjectMapper mapper = new ObjectMapper();
 
     public static String convertToJson(Object o) throws JsonProcessingException {
         return mapper.writeValueAsString(o);

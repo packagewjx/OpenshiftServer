@@ -22,7 +22,7 @@ public interface Manager<T extends BasePojo> {
      * create it by its name, you can update it afterwards.
      *
      * @param name object name, which is unique in the system.
-     * @return new object created
+     * @return new object created if success. If failed, return null.
      */
     T add(String name);
 

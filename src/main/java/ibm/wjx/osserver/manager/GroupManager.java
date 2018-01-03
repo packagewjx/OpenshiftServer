@@ -1,8 +1,8 @@
 package ibm.wjx.osserver.manager;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import ibm.wjx.osserver.pojo.BaseApiResult;
 import ibm.wjx.osserver.pojo.Group;
+import ibm.wjx.osserver.pojo.ListResult;
 import ibm.wjx.osserver.pojo.User;
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
@@ -77,7 +77,7 @@ public class GroupManager extends BaseManager<Group> {
         }
         if (group.getUsers().size() > 1) {
             GetResourceObjectsCommand<User> command = new GetResourceObjectsCommand<>(new ApiTypeReference<>(), CmdKind.USER, group.getUsers());
-            ShellCommandResult<BaseApiResult<User>> commandResult = command.execute();
+            ShellCommandResult<ListResult<User>> commandResult = command.execute();
             if (commandResult.getReturnCode() == BaseShellCommand.PROCESS_OK && commandResult.getData().isPresent()) {
                 result.addAll(commandResult.getData().get().getItems());
             }

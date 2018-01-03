@@ -9,12 +9,12 @@ import java.util.Properties;
 
 /**
  * Create Date: 12/20/17
- * Author: <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
+ * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: A Utility class to read configurations.
  */
 public class ConfigurationUtils {
-    private static final Logger logger = LoggerFactory.getLogger(ConfigurationUtils.class);
-    private static final Properties config = new Properties();
+    private static Logger logger = LoggerFactory.getLogger(ConfigurationUtils.class);
+    private static Properties config = new Properties();
 
     static {
         try {

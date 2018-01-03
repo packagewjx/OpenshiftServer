@@ -1,6 +1,5 @@
 package ibm.wjx.osserver.shell.oc;
 
-import ibm.wjx.osserver.pojo.BaseApiResult;
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.resultparser.ResultParser;
 import ibm.wjx.osserver.util.ConfigurationUtils;

@@ -1,6 +1,6 @@
 package ibm.wjx.osserver.shell.oc.get;
 
-import ibm.wjx.osserver.pojo.BaseApiResult;
+import ibm.wjx.osserver.pojo.ListResult;
 import ibm.wjx.osserver.shell.resultparser.JsonParser;
 
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
-public class GetResourceObjectsCommand<T> extends BaseGetCommand<BaseApiResult<T>> {
+public class GetResourceObjectsCommand<T> extends BaseGetCommand<ListResult<T>> {
     private final String resourceKind;
     private Collection<String> names;
 
