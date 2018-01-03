@@ -10,13 +10,13 @@ import java.util.List;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: get command api returned result contains.
  */
-public class BaseApiResult<T> extends BasePojo {
+public class ListResult<T> extends BasePojo {
     protected String resourceVersion;
     protected String selfLink;
     protected List<T> items;
 
-    public BaseApiResult() {
-        this.kind = Kind.LIST;
+    public ListResult() {
+        super(Kind.LIST);
     }
 
     public String getResourceVersion() {
@@ -45,7 +45,7 @@ public class BaseApiResult<T> extends BasePojo {
 
     @Override
     public String toString() {
-        return "BaseApiResult{" +
+        return "ListResult{" +
                 "resourceVersion='" + resourceVersion + '\'' +
                 ", selfLink='" + selfLink + '\'' +
                 ", items=" + items +

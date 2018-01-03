@@ -1,5 +1,7 @@
 package ibm.wjx.osserver.pojo;
 
+import ibm.wjx.osserver.constant.Kind;
+
 import java.util.Set;
 
 /**
@@ -10,6 +12,10 @@ import java.util.Set;
  */
 public class Group extends BasePojo {
     private Set<String> users;
+
+    public Group() {
+        super(Kind.GROUP);
+    }
 
     public Set<String> getUsers() {
         return users;

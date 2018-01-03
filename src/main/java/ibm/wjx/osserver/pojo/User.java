@@ -1,5 +1,7 @@
 package ibm.wjx.osserver.pojo;
 
+import ibm.wjx.osserver.constant.Kind;
+
 import java.util.Set;
 
 /**
@@ -12,6 +14,10 @@ public class User extends BasePojo {
     private Set<String> identities;
     private Set<String> groups;
 
+    public User() {
+        super(Kind.USER);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -21,6 +27,16 @@ public class User extends BasePojo {
                 ", kind='" + kind + '\'' +
                 ", metadata=" + metadata +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
     public Set<String> getIdentities() {
@@ -38,4 +54,6 @@ public class User extends BasePojo {
     public void setGroups(Set<String> groups) {
         this.groups = groups;
     }
+
+
 }

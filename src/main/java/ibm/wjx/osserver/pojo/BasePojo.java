@@ -10,9 +10,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class BasePojo {
-    protected String apiVersion;
+    protected String apiVersion = "v1";
     protected String kind;
-    protected Metadata metadata;
+    protected Metadata metadata = new Metadata();
+
+    protected BasePojo(String kind) {
+        this.kind = kind;
+    }
 
     public String getApiVersion() {
         return apiVersion;

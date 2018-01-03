@@ -1,7 +1,7 @@
 package shell;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import ibm.wjx.osserver.pojo.BaseApiResult;
+import ibm.wjx.osserver.pojo.ListResult;
 import ibm.wjx.osserver.pojo.User;
 import ibm.wjx.osserver.shell.ShellCommandResult;
 import ibm.wjx.osserver.shell.constant.CmdKind;
@@ -22,7 +22,7 @@ public class GetUserCommandTest {
     @Test
     public void testGetUsers() {
         GetResourceObjectsCommand<User> command = new GetResourceObjectsCommand<>(new ApiTypeReference<User>(), CmdKind.USER);
-        ShellCommandResult<BaseApiResult<User>> result = command.execute();
+        ShellCommandResult<ListResult<User>> result = command.execute();
         System.out.println(result);
         assertNotNull(result);
     }

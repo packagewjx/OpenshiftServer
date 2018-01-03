@@ -37,8 +37,17 @@ public abstract class BaseShellCommand<DataType> {
         this.resultParser = resultParser;
     }
 
+    /**
+     * Get the command word array to construct a command, implement this to let base class to use to execute this command
+     * using template method.
+     * @return the command word array, in order.
+     */
     protected abstract List<String> getCmdArray();
 
+    /**
+     * Execute the command using the environment variables provided by this method.
+     * @return environment variables, format is "env_name=env_val"
+     */
     protected abstract Set<String> getEnvs();
 
     /**
