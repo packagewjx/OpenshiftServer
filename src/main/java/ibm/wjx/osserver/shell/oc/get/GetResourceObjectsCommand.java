@@ -10,19 +10,27 @@ import java.util.List;
  * Create Date: 12/29/17
  *
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
- * Description:
+ * Description: a template class for getting all objects or some objects.
  */
 public class GetResourceObjectsCommand<T> extends BaseGetCommand<ListResult<T>> {
     private final String resourceKind;
     private Collection<String> names;
 
     public GetResourceObjectsCommand(ApiTypeReference<T> typeReference, String resourceKind) {
-        super(new JsonParser<>(typeReference));
+        this(typeReference, resourceKind, false);
+    }
+
+    public GetResourceObjectsCommand(ApiTypeReference<T> typeReference, String resourceKind, boolean isAllNamespace) {
+        super(new JsonParser<>(typeReference), isAllNamespace);
         this.resourceKind = resourceKind;
     }
 
     public GetResourceObjectsCommand(ApiTypeReference<T> typeReference, String resourceKind, Collection<String> names) {
-        super(new JsonParser<>(typeReference));
+        this(typeReference, resourceKind, names, false);
+    }
+
+    public GetResourceObjectsCommand(ApiTypeReference<T> typeReference, String resourceKind, Collection<String> names, boolean isAllNamespace) {
+        super(new JsonParser<>(typeReference), isAllNamespace);
         this.resourceKind = resourceKind;
         this.names = names;
     }

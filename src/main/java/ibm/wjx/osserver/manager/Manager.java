@@ -2,6 +2,8 @@ package ibm.wjx.osserver.manager;
 
 import ibm.wjx.osserver.pojo.BasePojo;
 
+import java.util.List;
+
 /**
  * Create Date: 12/29/17
  *
@@ -49,4 +51,11 @@ public interface Manager<T extends BasePojo> {
      * @return the desired object
      */
     T get(String name);
+
+    /**
+     * Get all objects.
+     *
+     * @return all objects
+     */
+    List<T> getAll();
 }

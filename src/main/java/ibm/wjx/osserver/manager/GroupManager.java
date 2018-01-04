@@ -20,10 +20,10 @@ import java.util.Set;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
-public class GroupManager extends BaseManager<Group> {
+public class GroupManager extends BaseResourceManager<Group> {
     public GroupManager() {
         super(CmdKind.GROUP, new TypeReference<Group>() {
-        });
+        }, new ApiTypeReference<>());
     }
 
     /**

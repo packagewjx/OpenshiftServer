@@ -12,12 +12,20 @@ import java.util.List;
  * Description: oc get command base class
  */
 public abstract class BaseGetCommand<T> extends BaseOcCommand<T> {
+    private boolean isAllNamespaces;
+
     protected BaseGetCommand(ResultParser<T> resultParser) {
+        this(resultParser, false);
+    }
+
+    protected BaseGetCommand(ResultParser<T> resultParser, boolean isAllNamespaces) {
         super(resultParser);
+        this.isAllNamespaces = isAllNamespaces;
     }
 
     /**
      * Build A Command String Like "oc get -o json"
+     *
      * @return List of string containing oc, get, -o, json
      */
     @Override
@@ -27,6 +35,9 @@ public abstract class BaseGetCommand<T> extends BaseOcCommand<T> {
         //make output format to json
         cmdArray.add("-o");
         cmdArray.add("json");
+        if (isAllNamespaces) {
+            cmdArray.add("--all-namespaces");
+        }
         return cmdArray;
     }
 }

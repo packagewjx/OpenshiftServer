@@ -5,6 +5,7 @@ import ibm.wjx.osserver.operation.user.CreateUserOperation;
 import ibm.wjx.osserver.operation.user.DeleteUserOperation;
 import ibm.wjx.osserver.pojo.User;
 import ibm.wjx.osserver.shell.constant.CmdKind;
+import ibm.wjx.osserver.shell.oc.get.ApiTypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +15,13 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: class to manage user.
  */
-public class UserManager extends BaseManager<User> {
+public class UserManager extends BaseResourceManager<User> {
     private static final String IDENTITY_PROVIDER = "anypassword";
     private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
 
     public UserManager() {
         super(CmdKind.USER, new TypeReference<User>() {
-        });
+        }, new ApiTypeReference<>());
     }
 
     @Override
