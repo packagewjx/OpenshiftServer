@@ -10,6 +10,7 @@ import ibm.wjx.osserver.shell.constant.CmdKind;
 import ibm.wjx.osserver.shell.oc.get.ApiTypeReference;
 import ibm.wjx.osserver.shell.oc.get.GetResourceObjectCommand;
 import ibm.wjx.osserver.shell.oc.get.GetResourceObjectsCommand;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,8 @@ import java.util.Set;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
+
+@Component
 public class GroupManager extends BaseResourceManager<Group> {
     public GroupManager() {
         super(CmdKind.GROUP, new TypeReference<Group>() {

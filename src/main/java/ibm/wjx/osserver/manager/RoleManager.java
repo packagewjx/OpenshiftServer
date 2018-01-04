@@ -9,6 +9,7 @@ import ibm.wjx.osserver.shell.oc.adm.policy.AddAndRemoveRoleBindingCommand;
 import ibm.wjx.osserver.shell.oc.adm.policy.RemoveUserGroupCommand;
 import ibm.wjx.osserver.shell.oc.create.CreateRoleCommand;
 import ibm.wjx.osserver.shell.oc.get.ApiTypeReference;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,8 @@ import java.util.Set;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
+
+@Component
 public class RoleManager extends BaseResourceManager<Role> {
     public RoleManager() {
         super(CmdKind.ROLE, new TypeReference<Role>() {

@@ -8,6 +8,7 @@ import ibm.wjx.osserver.shell.constant.CmdKind;
 import ibm.wjx.osserver.shell.oc.get.ApiTypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * Create Date: 12/29/17
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: class to manage user.
  */
+@Component
 public class UserManager extends BaseResourceManager<User> {
     private static final String IDENTITY_PROVIDER = "anypassword";
     private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
