@@ -24,7 +24,7 @@ public abstract class BaseOperation<T> {
      */
     private int executed;
 
-    public BaseOperation() {
+    protected BaseOperation() {
         commands = new ArrayList<>();
         handlers = new ArrayList<>();
         executed = 0;
@@ -33,13 +33,19 @@ public abstract class BaseOperation<T> {
     /**
      * add a command to this operation, use DoNothingHandler.
      *
-     * @param command
+     * @param command the command to be executed
      */
-    protected void addCommand(BaseShellCommand command) {
+    protected final void addCommand(BaseShellCommand command) {
         addCommand(command, DoNothingHandler.getInstance());
     }
 
-    protected void addCommand(BaseShellCommand command, CommandCompleteHandler handler) {
+    /**
+     * add a command to this operation using the provided handler
+     *
+     * @param command a command to be executed
+     * @param handler when this command ends, invoke the handler
+     */
+    protected final void addCommand(BaseShellCommand command, CommandCompleteHandler handler) {
         commands.add(command);
         handlers.add(handler);
     }
@@ -53,6 +59,11 @@ public abstract class BaseOperation<T> {
     protected abstract T getResult(OperationResult<T> result);
 
     /**
+     * Override this method to prepare commands and their handler
+     */
+    protected void prepare() {}
+
+    /**
      * Execute the whole operation, success when all command executed successfully. When one command failed, stop the
      * operation and handle the error.
      * TODO make this method handle errors.
@@ -61,6 +72,9 @@ public abstract class BaseOperation<T> {
         if (executed > 0) {
             logger.warn("This operation has been executed");
         }
+        //do something to prepare.
+        logger.info("Invoking operation prepare process.");
+        prepare();
         logger.info("Starting Operation");
         OperationResult<T> operationResult = new OperationResult<>();
         for (int i = 0; i < commands.size(); i++) {

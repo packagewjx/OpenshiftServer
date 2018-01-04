@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract Base Class for a shell command, use template method to execute a command.
+ * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * @param <DataType> The Return Object Type.
  */
 public abstract class BaseShellCommand<DataType> {
@@ -162,10 +163,15 @@ public abstract class BaseShellCommand<DataType> {
                 if (process.exitValue() == PROCESS_OK) {
                     logger.info("Command Executed Successfully");
                     //remove the last line separator
-                    okStringBuilder.deleteCharAt(okStringBuilder.length() - 1);
-                    String rawResult = okStringBuilder.toString();
-                    result.setReturnCode(PROCESS_OK);
-                    result.setRawResult(rawResult);
+                    String rawResult;
+                    if (okStringBuilder.length() > 0) {
+                        okStringBuilder.deleteCharAt(okStringBuilder.length() - 1);
+                        rawResult = okStringBuilder.toString();
+                        result.setReturnCode(PROCESS_OK);
+                        result.setRawResult(rawResult);
+                    } else {
+                        rawResult = "";
+                    }
                     DataType data = resultParser.parse(rawResult);
                     result.setData(data);
                     //do something after success
@@ -175,8 +181,12 @@ public abstract class BaseShellCommand<DataType> {
                     logger.error("Command exited with code {}. Error Message is: {}", process.exitValue(), errStringBuilder.toString());
                     result.setData(null);
                     //remove the last line separator
-                    errStringBuilder.deleteCharAt(errStringBuilder.length() - 1);
-                    result.setRawResult(errStringBuilder.toString());
+                    if (errStringBuilder.length() > 0) {
+                        errStringBuilder.deleteCharAt(errStringBuilder.length() - 1);
+                        result.setRawResult(errStringBuilder.toString());
+                    } else {
+                        result.setRawResult("No error message");
+                    }
                     result.setReturnCode(process.exitValue());
                 }
             } else {
