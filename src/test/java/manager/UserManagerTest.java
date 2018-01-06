@@ -9,6 +9,7 @@ import ibm.wjx.osserver.shell.oc.create.CreateResourceCommand;
 import ibm.wjx.osserver.shell.oc.delete.DeleteResourceCommand;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -53,5 +54,12 @@ public class UserManagerTest {
         assertEquals(BaseShellCommand.PROCESS_OK, commandResult1.getReturnCode());
     }
 
-
+    @Test
+    public void testGetAll() {
+        UserManager manager = new UserManager();
+        List<User> users = manager.getAllInAllProjects();
+        assertNotNull(users);
+        users = manager.getAll();
+        assertNotNull(users);
+    }
 }

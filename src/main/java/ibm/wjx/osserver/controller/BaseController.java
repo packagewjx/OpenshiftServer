@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 public abstract class BaseController<T extends BasePojo> {
-    private ResourceManager<T> manager;
+    protected ResourceManager<T> manager;
 
     protected BaseController(ResourceManager<T> manager) {
         this.manager = manager;

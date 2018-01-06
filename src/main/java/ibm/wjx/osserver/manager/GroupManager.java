@@ -35,16 +35,19 @@ public class GroupManager extends BaseResourceManager<Group> {
      * @param groupName name of the group
      * @param username  user you want to add
      */
-    public void addUser(String groupName, String username) {
+    public boolean addUser(String groupName, String username) {
         Group group = get(groupName);
         if (group == null) {
             logger.error("Cannot find group {}", groupName);
-            return;
+            return false;
         }
         group.getUsers().add(username);
         Group updated = update(group);
         if (!updated.getMetadata().getResourceVersion().equals(group.getMetadata().getResourceVersion())) {
             logger.info("Add user {} to group {} succeed.", username, groupName);
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -53,16 +56,19 @@ public class GroupManager extends BaseResourceManager<Group> {
      * @param groupName group name
      * @param username username
      */
-    public void removeUser(String groupName, String username) {
+    public boolean removeUser(String groupName, String username) {
         Group group = get(groupName);
         if (group == null) {
             logger.error("Cannot find group {}", groupName);
-            return;
+            return false;
         }
         group.getUsers().remove(username);
         Group updated = update(group);
         if (!updated.getMetadata().getResourceVersion().equals(group.getMetadata().getResourceVersion())) {
             logger.info("Delete user {} from group {} succeed.", username, groupName);
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -39,7 +39,9 @@ public class GetResourceObjectsCommand<T> extends BaseGetCommand<ListResult<T>> 
     protected List<String> getCmdArray() {
         List<String> cmdArray = super.getCmdArray();
         cmdArray.add(resourceKind);
-        cmdArray.addAll(names);
+        if (names != null && names.size() > 0) {
+            cmdArray.addAll(names);
+        }
         return cmdArray;
     }
 }

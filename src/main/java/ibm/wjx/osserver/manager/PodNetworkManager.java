@@ -4,6 +4,7 @@ import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.oc.adm.podnetwork.IsolateNetworkCommand;
 import ibm.wjx.osserver.shell.oc.adm.podnetwork.JoinNetworkCommand;
 import ibm.wjx.osserver.shell.oc.adm.podnetwork.MakeNetworkGlobalCommand;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * Description:
  * TODO test this manager
  */
+@Component
 public class PodNetworkManager {
 
     public boolean joinProjects(String toProject, String selector) {
