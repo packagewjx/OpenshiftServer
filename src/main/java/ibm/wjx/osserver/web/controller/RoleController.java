@@ -1,4 +1,4 @@
-package ibm.wjx.osserver.controller;
+package ibm.wjx.osserver.web.controller;
 
 import ibm.wjx.osserver.manager.ResourceManager;
 import ibm.wjx.osserver.manager.RoleManager;

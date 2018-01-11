@@ -20,7 +20,7 @@ import java.io.IOException;
  * assemble script, used to build the sources, and run script, used to run the program in the image. The sources is built
  * on the builder image, which is defined by Dockerfile. You can customize Dockerfile using the set method, and you can
  * also set the builder image name, whose default value is DEFAULT_BUILD_IMAGE_NAME. Then it will invoke a "make" command,
- * to construct the builder image. A last, it will perform "s2i build" command to build the image we need.
+ * to construct the builder image. At last, it will perform "s2i build" command to build the image we need.
  * @see S2IOperation#DEFAULT_BUILD_IMAGE_NAME
  */
 public class S2IOperation extends BaseOperation<Boolean> {
@@ -47,6 +47,19 @@ public class S2IOperation extends BaseOperation<Boolean> {
      * The image this Source-To-Image process will build.
      */
     private String imageName;
+    /**
+     * Optional test/run script, to test building the image and run it.
+     */
+    private String testRunScript;
+    /**
+     * Optional save-artifact script, to save the last build and then rebuild the sources.
+     */
+    private String saveArtifactScript;
+    /**
+     * Optional usage script, to tell user how to use this image
+     */
+    private String usageScript;
+
 
     /**
      * gather the required scripts and set image name
@@ -59,6 +72,26 @@ public class S2IOperation extends BaseOperation<Boolean> {
         this.assembleScript = assembleScript;
         this.runScript = runScript;
         this.imageName = imageName;
+    }
+
+    public static String getDefaultBuildImageName() {
+        return DEFAULT_BUILD_IMAGE_NAME;
+    }
+
+    public String getTestRunScript() {
+        return testRunScript;
+    }
+
+    public void setTestRunScript(String testRunScript) {
+        this.testRunScript = testRunScript;
+    }
+
+    public String getSaveArtifactScript() {
+        return saveArtifactScript;
+    }
+
+    public void setSaveArtifactScript(String saveArtifactScript) {
+        this.saveArtifactScript = saveArtifactScript;
     }
 
     public String getImageName() {
@@ -88,6 +121,14 @@ public class S2IOperation extends BaseOperation<Boolean> {
         this.dockerFileScript = dockerFileScript;
     }
 
+    public String getUsageScript() {
+        return usageScript;
+    }
+
+    public void setUsageScript(String usageScript) {
+        this.usageScript = usageScript;
+    }
+
     @Override
     protected void prepare() {
         if (assembleScript == null) {
@@ -97,52 +138,41 @@ public class S2IOperation extends BaseOperation<Boolean> {
         if (runScript == null) {
             runScript = "";
         }
-        /*
-        I use imageName to be the name of the directory, so the second parameter is imageName
-         */
-        addCommand(new S2ICreateCommand(builderImageName, imageName), (CommandCompleteHandler<String>) (result, nextCommand) -> {
+        //I use imageName to be the name of the directory
+        String dirName = this.imageName;
+        addCommand(new S2ICreateCommand(builderImageName, dirName), (CommandCompleteHandler<String>) (result, nextCommand) -> {
             //when command ends, write the files.
             if (result.getReturnCode() != BaseShellCommand.PROCESS_OK) {
                 logger.error("s2i create command failed, returning");
                 return false;
             }
-            FileWriter assembleWriter = null;
-            FileWriter runWriter = null;
-            FileWriter dockerWriter = null;
             try {
-                assembleWriter = new FileWriter(imageName + "/s2i/bin/assemble");
-                runWriter = new FileWriter(imageName + "/s2i/bin/run");
-                assembleWriter.write(assembleScript);
-                runWriter.write(runScript);
+                logger.debug("Saving scripts to files");
+                saveToFile(this.imageName + "/s2i/bin/assemble", assembleScript);
+                saveToFile(this.imageName + "/s2i/bin/run", runScript);
                 if (dockerFileScript != null && !"".equals(dockerFileScript)) {
-                    dockerWriter = new FileWriter(imageName + "/Dockerfile");
-                    dockerWriter.write(dockerFileScript);
+                    saveToFile(this.imageName + "/Dockerfile", dockerFileScript);
                 }
+                if (saveArtifactScript != null && !"".equals(saveArtifactScript)) {
+                    saveToFile(this.imageName + "/s2i/bin/save-artifact", saveArtifactScript);
+                }
+                if (testRunScript != null && !"".equals(testRunScript)) {
+                    saveToFile(this.imageName + "/test/run", testRunScript);
+                }
+                if (usageScript != null && !"".equals(usageScript)) {
+                    saveToFile(this.imageName + "/s2i/bin/usage", usageScript);
+                }
+
             } catch (IOException e) {
-                logger.error("Error writing script to files");
+                logger.error("Exception occurred while writing s2i files");
                 logger.error(ExceptionLogUtil.getStacktrace(e));
                 return false;
-            } finally {
-                try {
-                    if (assembleWriter != null) {
-                        assembleWriter.close();
-                    }
-                    if (runWriter != null) {
-                        runWriter.close();
-                    }
-                    if (dockerWriter != null) {
-                        dockerWriter.close();
-                    }
-                } catch (IOException e) {
-                    logger.error("Error while closing writers");
-                    logger.error(ExceptionLogUtil.getStacktrace(e));
-                }
             }
             return true;
         });
         //build the builder image
-        addCommand(new StringCommand("make -C " + imageName));
-        addCommand(new S2IBuildCommand(imageName, builderImageName, imageName));
+        addCommand(new StringCommand("make -C " + this.imageName));
+        addCommand(new S2IBuildCommand(this.imageName, builderImageName, this.imageName));
     }
 
     public String getAssembleScript() {
@@ -167,5 +197,11 @@ public class S2IOperation extends BaseOperation<Boolean> {
 
     public void setBuilderImageName(String builderImageName) {
         this.builderImageName = builderImageName;
+    }
+
+    private void saveToFile(String fileName, String content) throws IOException {
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write(content);
+        }
     }
 }

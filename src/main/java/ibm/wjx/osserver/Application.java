@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
-@SpringBootApplication(scanBasePackages = {"ibm.wjx.osserver.manager", "ibm.wjx.osserver.controller"})
+@SpringBootApplication(scanBasePackages = {"ibm.wjx.osserver.manager", "ibm.wjx.osserver.web.controller"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

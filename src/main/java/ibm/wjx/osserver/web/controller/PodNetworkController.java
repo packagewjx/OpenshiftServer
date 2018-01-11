@@ -1,4 +1,4 @@
-package ibm.wjx.osserver.controller;
+package ibm.wjx.osserver.web.controller;
 
 import ibm.wjx.osserver.manager.PodNetworkManager;
 import org.springframework.beans.factory.annotation.Autowired;
