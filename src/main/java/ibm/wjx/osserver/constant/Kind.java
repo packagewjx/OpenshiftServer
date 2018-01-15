@@ -12,4 +12,5 @@ public class Kind {
     public static final String IDENTITY = "Identity";
     public static final String GROUP = "Group";
     public static final String ROLE = "Role";
+    public static final String TEMPLATE = "Template";
 }

@@ -1,6 +1,7 @@
 package ibm.wjx.osserver.manager;
 
 import ibm.wjx.osserver.pojo.BasePojo;
+import ibm.wjx.osserver.pojo.Result;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface ResourceManager<T extends BasePojo> extends Manager<T> {
      * @param project the target project to add to
      * @return return new object created
      */
-    T add(T object, String project);
+    Result<T> add(T object, String project);
 
 
     /**
@@ -28,7 +29,7 @@ public interface ResourceManager<T extends BasePojo> extends Manager<T> {
      * @param project the target project to add to
      * @return new object created if success. If failed, return null.
      */
-    T add(String name, String project);
+    Result<T> add(String name, String project);
 
     /**
      * delete an object by its name
@@ -37,16 +38,16 @@ public interface ResourceManager<T extends BasePojo> extends Manager<T> {
      * @param project the target project to add to
      * @return true indicates success, otherwise false.
      */
-    boolean delete(String name, String project);
+    Result<Boolean> delete(String name, String project);
 
     /**
      * Update the object, return the new object.
      *
      * @param object  updated object
      * @param project the target project to add to
-     * @return object updated and stored in the system.
+     * @return object updated and stored in the system. if fail, return old object.
      */
-    T update(T object, String project);
+    Result<T> update(T object, String project);
 
     /**
      * get one object
@@ -55,7 +56,7 @@ public interface ResourceManager<T extends BasePojo> extends Manager<T> {
      * @param project the target project to add to
      * @return the desired object
      */
-    T get(String name, String project);
+    Result<T> get(String name, String project);
 
     /**
      * get all resource object in a project.
@@ -63,12 +64,12 @@ public interface ResourceManager<T extends BasePojo> extends Manager<T> {
      * @param project project name
      * @return all resource object in a project.
      */
-    List<T> getAllInProject(String project);
+    Result<List<T>> getAllInProject(String project);
 
     /**
      * get all resource object in all namespaces.
      *
      * @return all resource object in all namespaces.
      */
-    List<T> getAllInAllProjects();
+    Result<List<T>> getAllInAllProjects();
 }

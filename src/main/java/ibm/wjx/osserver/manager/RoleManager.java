@@ -1,6 +1,7 @@
 package ibm.wjx.osserver.manager;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import ibm.wjx.osserver.pojo.Result;
 import ibm.wjx.osserver.pojo.Role;
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
@@ -35,7 +36,7 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param username username
      * @return true success, false fail
      */
-    public boolean addRoleToUser(String role, String username) {
+    public Result<Boolean> addRoleToUser(String role, String username) {
         return addOrRemove(AddAndRemoveRoleBindingCommand.ADD_TO_USER, role, username);
     }
 
@@ -47,27 +48,27 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @see RoleManager#add(String, Set, Set, Set)
      */
     @Override
-    public Role add(String name) {
+    public Result<Role> add(String name) {
         throw new UnsupportedOperationException("Can not add role by its name");
     }
 
     /**
      * Create a role.
      *
-     * @param name         Role name
-     * @param verbs        what action this role can do, in Verb class
-     * @param resources    what resources can this role manipulate on
+     * @param name          Role name
+     * @param verbs         what action this role can do, in Verb class
+     * @param resources     what resources can this role manipulate on
      * @param resourceNames nullable. the specific resource name that this role can manipulate on.
      * @return new role added
      */
-    public Role add(String name, Set<String> verbs, Set<String> resources, Set<String> resourceNames) {
+    public Result<Role> add(String name, Set<String> verbs, Set<String> resources, Set<String> resourceNames) {
         CreateRoleCommand createRoleCommand = new CreateRoleCommand(name, verbs, resources, resourceNames == null ? new HashSet<>() : resourceNames);
         ShellCommandResult<String> result = createRoleCommand.execute();
         if (result.getReturnCode() == BaseShellCommand.PROCESS_OK) {
             return get(name);
         } else {
             logger.error("Create role {} failed", name);
-            return null;
+            return Result.newFailResult(null, result.getReturnCode(), result.getRawResult());
         }
     }
 
@@ -78,7 +79,7 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param groupName group name
      * @return true success, false fail
      */
-    public boolean addRoleToGroup(String role, String groupName) {
+    public Result<Boolean> addRoleToGroup(String role, String groupName) {
         return addOrRemove(AddAndRemoveRoleBindingCommand.ADD_TO_GROUP, role, groupName);
     }
 
@@ -89,7 +90,7 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param username username
      * @return true success, false fail
      */
-    public boolean removeRoleFromUser(String role, String username) {
+    public Result<Boolean> removeRoleFromUser(String role, String username) {
         return addOrRemove(AddAndRemoveRoleBindingCommand.REMOVE_FROM_USER, role, username);
     }
 
@@ -100,7 +101,7 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param groupName group name
      * @return true success, false fail
      */
-    public boolean removeRoleFromGroup(String role, String groupName) {
+    public Result<Boolean> removeRoleFromGroup(String role, String groupName) {
         return addOrRemove(AddAndRemoveRoleBindingCommand.REMOVE_FROM_GROUP, role, groupName);
     }
 
@@ -110,7 +111,7 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param username the user want to remove
      * @return true success, false fail
      */
-    public boolean removeUserAllRole(String username) {
+    public Result<Boolean> removeUserAllRole(String username) {
         return removeGroupOrUser(true, username);
     }
 
@@ -120,7 +121,7 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param groupName the group you want to remove
      * @return true success, false fail
      */
-    public boolean removeGroupAllRole(String groupName) {
+    public Result<Boolean> removeGroupAllRole(String groupName) {
         return removeGroupOrUser(false, groupName);
     }
 
@@ -132,7 +133,7 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param name   user/group name
      * @return true success, false fail
      */
-    private boolean addOrRemove(int action, String role, String name) {
+    private Result<Boolean> addOrRemove(int action, String role, String name) {
         AddAndRemoveRoleBindingCommand command = new AddAndRemoveRoleBindingCommand(action, role, name);
         ShellCommandResult<String> result = command.execute();
         if (result.getReturnCode() == BaseShellCommand.PROCESS_OK) {
@@ -141,14 +142,14 @@ public class RoleManager extends BaseResourceManager<Role> {
                     role,
                     action == AddAndRemoveRoleBindingCommand.ADD_TO_USER || action == AddAndRemoveRoleBindingCommand.REMOVE_FROM_USER ? "user" : "group",
                     name);
-            return true;
+            return Result.newSuccessResult(true);
         } else {
             logger.info("{} role {} to {} {} failed",
                     action == AddAndRemoveRoleBindingCommand.ADD_TO_GROUP || action == AddAndRemoveRoleBindingCommand.ADD_TO_USER ? "Add" : "Remove",
                     role,
                     action == AddAndRemoveRoleBindingCommand.ADD_TO_USER || action == AddAndRemoveRoleBindingCommand.REMOVE_FROM_USER ? "user" : "group",
                     name);
-            return false;
+            return Result.newFailResult(false, result.getReturnCode(), result.getRawResult());
         }
     }
 
@@ -159,15 +160,15 @@ public class RoleManager extends BaseResourceManager<Role> {
      * @param name   user or group name
      * @return true success, false fail
      */
-    private boolean removeGroupOrUser(boolean isUser, String name) {
+    private Result<Boolean> removeGroupOrUser(boolean isUser, String name) {
         RemoveUserGroupCommand command = new RemoveUserGroupCommand(isUser ? RemoveUserGroupCommand.USER : RemoveUserGroupCommand.GROUP, name);
         ShellCommandResult<String> result = command.execute();
         if (result.getReturnCode() == BaseShellCommand.PROCESS_OK) {
             logger.info("Successfully removed {} {} and its role", isUser ? "user" : "group", name);
-            return true;
+            return Result.newSuccessResult(true);
         } else {
             logger.error("Failed to remove {} {} and its role", isUser ? "user" : "group", name);
-            return false;
+            return Result.newFailResult(false, result.getReturnCode(), result.getRawResult());
         }
     }
 }

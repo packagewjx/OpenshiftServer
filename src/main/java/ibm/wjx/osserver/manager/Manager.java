@@ -1,6 +1,7 @@
 package ibm.wjx.osserver.manager;
 
 import ibm.wjx.osserver.pojo.BasePojo;
+import ibm.wjx.osserver.pojo.Result;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface Manager<T extends BasePojo> {
      * @param object new object
      * @return return new object created
      */
-    T add(T object);
+    Result<T> add(T object);
 
 
     /**
@@ -26,7 +27,7 @@ public interface Manager<T extends BasePojo> {
      * @param name object name, which is unique in the system.
      * @return new object created if success. If failed, return null.
      */
-    T add(String name);
+    Result<T> add(String name);
 
     /**
      * delete an object by its name
@@ -34,7 +35,7 @@ public interface Manager<T extends BasePojo> {
      * @param name the object's name
      * @return true indicates success, otherwise false.
      */
-    boolean delete(String name);
+    Result<Boolean> delete(String name);
 
     /**
      * Update the object, return the new object.
@@ -42,7 +43,7 @@ public interface Manager<T extends BasePojo> {
      * @param object updated object
      * @return object updated and stored in the system.
      */
-    T update(T object);
+    Result<T> update(T object);
 
     /**
      * get one object
@@ -50,12 +51,12 @@ public interface Manager<T extends BasePojo> {
      * @param name objects name
      * @return the desired object
      */
-    T get(String name);
+    Result<T> get(String name);
 
     /**
      * Get all objects.
      *
      * @return all objects
      */
-    List<T> getAll();
+    Result<List<T>> getAll();
 }

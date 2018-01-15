@@ -1,6 +1,8 @@
 package manager;
 
+import ibm.wjx.osserver.constant.ResultCode;
 import ibm.wjx.osserver.manager.UserManager;
+import ibm.wjx.osserver.pojo.Result;
 import ibm.wjx.osserver.pojo.User;
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
@@ -27,8 +29,9 @@ public class UserManagerTest {
         UserManager manager = new UserManager();
         //test add
         String username = "testuser";
-        User user = manager.add(username);
-        assertNotNull(user);
+        Result<User> addResult = manager.add(username);
+        assertEquals(ResultCode.SUCCESS, addResult.getResultCode());
+        User user = addResult.getData();
         assertEquals(username, user.getMetadata().getName());
         //test update, update the new identity
         String anIdentity = "anypassword:anIdentity";
@@ -39,16 +42,19 @@ public class UserManagerTest {
         identities.clear();
         identities.add(anIdentity);
         user.setIdentities(identities);
-        user = manager.update(user);
+        Result<User> updateResult = manager.update(user);
+        user = updateResult.getData();
+        assertEquals(ResultCode.SUCCESS, updateResult.getResultCode());
         assertNotNull(user.getIdentities());
         assertNotNull(user.getIdentities().iterator().next());
         assertEquals(anIdentity, user.getIdentities().iterator().next());
         //test get
-        user = manager.get(username);
-        assertNotNull(user);
+        Result<User> getResult = manager.get(username);
+        assertEquals(ResultCode.SUCCESS, getResult.getResultCode());
+        user = getResult.getData();
         assertTrue(username.equals(user.getMetadata().getName()));
         //test delete
-        assertTrue(manager.delete(username));
+        assertTrue(manager.delete(username).getData());
         DeleteResourceCommand command = new DeleteResourceCommand(CmdKind.IDENTITY, anIdentity);
         ShellCommandResult<String> commandResult1 = command.execute();
         assertEquals(BaseShellCommand.PROCESS_OK, commandResult1.getReturnCode());
@@ -57,9 +63,13 @@ public class UserManagerTest {
     @Test
     public void testGetAll() {
         UserManager manager = new UserManager();
-        List<User> users = manager.getAllInAllProjects();
+        Result<List<User>> getAllResult = manager.getAllInAllProjects();
+        assertEquals(ResultCode.SUCCESS, getAllResult.getResultCode());
+        List<User> users = getAllResult.getData();
         assertNotNull(users);
-        users = manager.getAll();
+        getAllResult = manager.getAll();
+        assertEquals(ResultCode.SUCCESS, getAllResult.getResultCode());
+        users = getAllResult.getData();
         assertNotNull(users);
     }
 }

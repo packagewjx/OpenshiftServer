@@ -1,11 +1,14 @@
 package manager;
 
+import ibm.wjx.osserver.constant.ResultCode;
 import ibm.wjx.osserver.manager.GroupManager;
+import ibm.wjx.osserver.pojo.Result;
 import ibm.wjx.osserver.pojo.User;
 import org.junit.Test;
 
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -26,16 +29,20 @@ public class GroupManagerTest {
     @Test
     public void testGetUsers() {
         GroupManager manager = new GroupManager();
-        manager.addUser("test", "test");
-        Set<User> groupUsers = manager.getGroupUsers("test");
+        String testUserName = "test";
+        String testGroupName = "test";
+        manager.addUser(testGroupName, testUserName);
+        Result<Set<User>> getGroupResult = manager.getGroupUsers(testGroupName);
+        assertEquals(ResultCode.SUCCESS, getGroupResult.getResultCode());
+        Set<User> groupUsers = getGroupResult.getData();
         boolean found = false;
         for (User groupUser : groupUsers) {
-            if (groupUser.getMetadata().getName().equals("test")) {
+            if (groupUser.getMetadata().getName().equals(testUserName)) {
                 found = true;
                 break;
             }
         }
         assertTrue(found);
-        manager.removeUser("test", "test");
+        manager.removeUser(testGroupName, testUserName);
     }
 }

@@ -13,6 +13,5 @@
         <appender-ref ref="STDOUT"/>
     </root>
     <logger name="ibm.wjx.osserver" level="DEBUG">
-        <appender-ref ref="STDOUT"/>
     </logger>
 </configuration>

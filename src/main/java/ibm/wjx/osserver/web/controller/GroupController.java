@@ -3,6 +3,7 @@ package ibm.wjx.osserver.web.controller;
 import ibm.wjx.osserver.manager.GroupManager;
 import ibm.wjx.osserver.manager.ResourceManager;
 import ibm.wjx.osserver.pojo.Group;
+import ibm.wjx.osserver.pojo.Result;
 import ibm.wjx.osserver.pojo.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,17 +25,17 @@ public class GroupController extends BaseController<Group> {
     }
 
     @RequestMapping(path = "/{name}/user", method = RequestMethod.GET)
-    public Set<User> getGroupUser(@PathVariable(value = "name") String groupName) {
+    public Result<Set<User>> getGroupUser(@PathVariable(value = "name") String groupName) {
         return groupManager.getGroupUsers(groupName);
     }
 
     @RequestMapping(value = "/{name}/user", method = RequestMethod.PUT)
-    public boolean addUserToGroup(@PathVariable(name = "name") String groupName, @RequestParam(name = "username") String username) {
+    public Result<Boolean> addUserToGroup(@PathVariable(name = "name") String groupName, @RequestParam(name = "username") String username) {
         return groupManager.addUser(groupName, username);
     }
 
     @RequestMapping(value = "/{name}/user/{username}", method = RequestMethod.DELETE)
-    public boolean deleteUserFromGroup(@PathVariable(name = "name") String groupName, @PathVariable("username") String username) {
+    public Result<Boolean> deleteUserFromGroup(@PathVariable(name = "name") String groupName, @PathVariable("username") String username) {
         return groupManager.removeUser(groupName, username);
     }
 
