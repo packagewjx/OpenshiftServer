@@ -14,5 +14,6 @@ public class CmdKind {
     public static final String ROLE = "role";
     public static final String CLUSTER_ROLE = "clusterrole";
     public static final String ROLE_BINGDING = "rolebinding";
+    public static final String TEMPLATE = "template";
 
 }

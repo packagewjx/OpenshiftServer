@@ -27,7 +27,8 @@ public class CreateFromJsonCommand extends BaseCreateCommand<String> {
     @Override
     protected List<String> getCmdArray() {
         List<String> cmdArray = super.getCmdArray();
-        cmdArray.add(resourceKind);
+        //create -f don't have resourcekind
+//        cmdArray.add(resourceKind);
         cmdArray.add("-f");
         cmdArray.add("createCmdFile.json");
         return cmdArray;
