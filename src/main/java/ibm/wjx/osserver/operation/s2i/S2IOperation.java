@@ -3,7 +3,9 @@ package ibm.wjx.osserver.operation.s2i;
 import ibm.wjx.osserver.operation.BaseOperation;
 import ibm.wjx.osserver.operation.CommandCompleteHandler;
 import ibm.wjx.osserver.operation.OperationResult;
+import ibm.wjx.osserver.pojo.Result;
 import ibm.wjx.osserver.shell.BaseShellCommand;
+import ibm.wjx.osserver.shell.ShellCommandResult;
 import ibm.wjx.osserver.shell.StringCommand;
 import ibm.wjx.osserver.shell.s2i.S2IBuildCommand;
 import ibm.wjx.osserver.shell.s2i.S2ICreateCommand;
@@ -103,14 +105,19 @@ public class S2IOperation extends BaseOperation<Boolean> {
     }
 
     @Override
-    protected Boolean getResult(OperationResult<Boolean> result) {
+    protected Result<Boolean> getResult(OperationResult<Boolean> result) {
         //delete those files created by s2i create
         if (new StringCommand("rm -rf " + imageName).execute().getReturnCode() != StringCommand.PROCESS_OK) {
             logger.error("Error Deleting S2I scripts");
         }
         logger.debug("Deleted S2I scripts");
 
-        return result.getCommandResults().size() == COMMAND_COUNT;
+        if (result.getCommandResults().size() == COMMAND_COUNT) {
+            return Result.newSuccessResult(true);
+        } else {
+            ShellCommandResult lastResult = result.getCommandResults().get(result.getCommandResults().size() - 1);
+            return Result.newFailResult(false, lastResult.getReturnCode(), lastResult.getRawResult());
+        }
     }
 
     public String getDockerFileScript() {

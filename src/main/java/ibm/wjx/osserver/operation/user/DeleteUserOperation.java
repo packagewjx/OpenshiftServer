@@ -2,6 +2,8 @@ package ibm.wjx.osserver.operation.user;
 
 import ibm.wjx.osserver.operation.BaseOperation;
 import ibm.wjx.osserver.operation.OperationResult;
+import ibm.wjx.osserver.pojo.Result;
+import ibm.wjx.osserver.shell.ShellCommandResult;
 import ibm.wjx.osserver.shell.oc.delete.DeleteResourceCommand;
 
 /**
@@ -17,7 +19,12 @@ public class DeleteUserOperation extends BaseOperation<Boolean>{
     }
 
     @Override
-    protected Boolean getResult(OperationResult<Boolean> result) {
-        return result.isAllOk();
+    protected Result<Boolean> getResult(OperationResult<Boolean> result) {
+        if (result.isAllOk()) {
+            return Result.newSuccessResult(true);
+        } else {
+            ShellCommandResult errorResult = result.getCommandResults().get(result.getCommandResults().size() - 1);
+            return Result.newFailResult(false, errorResult.getReturnCode(), errorResult.getRawResult());
+        }
     }
 }

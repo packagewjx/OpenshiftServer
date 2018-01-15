@@ -1,5 +1,6 @@
 package ibm.wjx.osserver.operation;
 
+import ibm.wjx.osserver.pojo.Result;
 import ibm.wjx.osserver.shell.BaseShellCommand;
 import ibm.wjx.osserver.shell.ShellCommandResult;
 import org.slf4j.Logger;
@@ -56,7 +57,7 @@ public abstract class BaseOperation<T> {
      * @param result operation command result, use to generate the final result
      * @return result that this command produce.
      */
-    protected abstract T getResult(OperationResult<T> result);
+    protected abstract Result<T> getResult(OperationResult<T> result);
 
     /**
      * Override this method to prepare commands and their handler
@@ -68,7 +69,7 @@ public abstract class BaseOperation<T> {
      * operation and handle the error.
      * TODO make this method handle errors.
      */
-    public T operate() {
+    public Result<T> operate() {
         if (executed > 0) {
             logger.warn("This operation has been executed");
         }

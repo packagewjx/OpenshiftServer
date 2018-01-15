@@ -1,6 +1,7 @@
 package operation;
 
 import ibm.wjx.osserver.operation.s2i.S2IOperation;
+import ibm.wjx.osserver.pojo.Result;
 import org.junit.Test;
 
 /**
@@ -21,6 +22,7 @@ public class S2ITest {
         //language=Bash
         String run = "echo \"running\"";
         S2IOperation operation = new S2IOperation(assemble, run, "tests2i");
-        Boolean operate = operation.operate();
+        Result<Boolean> operate = operation.operate();
+        assert operate.getData();
     }
 }

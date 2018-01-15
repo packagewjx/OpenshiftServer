@@ -1,6 +1,7 @@
 package ibm.wjx.osserver.web.controller;
 
 import ibm.wjx.osserver.operation.s2i.S2IOperation;
+import ibm.wjx.osserver.pojo.Result;
 import ibm.wjx.osserver.web.dto.S2IScripts;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class S2IController {
 
     @RequestMapping(value = "build", method = RequestMethod.POST)
-    public boolean build(@RequestBody S2IScripts scripts) {
+    public Result<Boolean> build(@RequestBody S2IScripts scripts) {
         S2IOperation operation = new S2IOperation(scripts.getAssembleScript(), scripts.getRunScript(), scripts.getImageName());
         operation.setBuilderImageName(scripts.getBuilderImageName());
         operation.setDockerFileScript(scripts.getDockerFileScript());

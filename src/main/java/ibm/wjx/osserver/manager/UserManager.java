@@ -31,25 +31,26 @@ public class UserManager extends BaseResourceManager<User> {
     @Override
     public Result<User> add(String name) {
         CreateUserOperation operation = new CreateUserOperation(name, IDENTITY_PROVIDER + ":" + name);
-        if (operation.operate()) {
+        Result<Boolean> result = operation.operate();
+        if (result.getResultCode() == ResultCode.SUCCESS) {
             logger.info("successfully created user {}", name);
             return get(name);
         } else {
-            logger.error("create user {} failed", name);
-            //TODO make operation to return Result<T>
-            return Result.newFailResult(null, ResultCode.OTHER, "failed to add user");
+            logger.error("create user {} failed, reason is {}", name, result.getMessage());
+            return Result.newFailResult(null, result.getResultCode(), result.getMessage());
         }
     }
 
     @Override
     public Result<Boolean> delete(String name) {
         DeleteUserOperation operation = new DeleteUserOperation(name, IDENTITY_PROVIDER + ":" + name);
-        if (operation.operate()) {
+        Result<Boolean> result = operation.operate();
+        if (result.getResultCode() == ResultCode.SUCCESS) {
             logger.info("successfully deleted user {}", name);
             return Result.newSuccessResult(true);
         } else {
             logger.error("delete user {} failed", name);
-            return Result.newFailResult(false, ResultCode.OTHER, "failed to delete user");
+            return Result.newFailResult(false, result.getResultCode(), result.getMessage());
         }
     }
 }
