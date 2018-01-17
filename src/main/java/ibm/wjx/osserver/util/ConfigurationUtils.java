@@ -34,5 +34,6 @@ public class ConfigurationUtils {
     public static final class Keys {
         public static final String OPENSHIFT_SERVER_ADDRESS = "address";
         public static final String KUBECONFIG_FILE = "kubeconfig.file";
+        public static final String ADMIN_PASSWORD = "adminPassword";
     }
 }

@@ -13,4 +13,5 @@ public class ResultMessage {
     public static final String WRONG_ARGUMENT = "Wrong argument";
     public static final String CONVERT_TO_JSON_ERROR = "Error while converting object to json";
     public static final String CONVERT_FROM_JSON_ERROR = "Error while converting json to object";
+    public static final String BAD_CREDENTIAL = "Your credential was wrong";
 }

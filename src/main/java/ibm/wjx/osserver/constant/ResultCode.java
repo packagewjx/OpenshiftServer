@@ -13,4 +13,5 @@ public class ResultCode {
     public static final int WRONG_ARGUMENT = 1003;
     public static final int OTHER = 1004;
     public static final int JSON_CONVERT_ERROR = 1005;
+    public static final int BAD_CREDENTIAL = 1006;
 }

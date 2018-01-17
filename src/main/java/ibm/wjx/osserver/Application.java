@@ -1,7 +1,11 @@
 package ibm.wjx.osserver;
 
+import ibm.wjx.osserver.config.SecurityConfig;
+import ibm.wjx.osserver.web.security.TokenManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 
 /**
  * Create Date: 1/4/18
@@ -9,9 +13,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description:
  */
-@SpringBootApplication(scanBasePackages = {"ibm.wjx.osserver.manager", "ibm.wjx.osserver.web.controller"})
+@SpringBootApplication
+@Import(SecurityConfig.class)
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+    @Bean(initMethod = "init")
+    public TokenManager tokenManager() {
+        return new TokenManager();
     }
 }
