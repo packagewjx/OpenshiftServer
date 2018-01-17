@@ -1,8 +1,8 @@
 package ibm.wjx.osserver.config;
 
-import ibm.wjx.osserver.web.security.CsrfTokenResponseHeaderBindingFilter;
 import ibm.wjx.osserver.web.security.TokenBasedAuthenticationEntryPoint;
 import ibm.wjx.osserver.web.security.TokenBasedAuthenticationFilter;
+import ibm.wjx.osserver.web.security.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
-import org.springframework.security.web.csrf.CsrfFilter;
 
 /**
  * Create Date: 1/16/18
@@ -30,14 +29,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenBasedAuthenticationFilter authenticationFilter;
     private final UserDetailsService userService;
     private final TokenBasedAuthenticationEntryPoint customEntryPoint;
-    private final CsrfTokenResponseHeaderBindingFilter csrfTokenResponseHeaderBindingFilter;
 
 
     @Autowired
-    public SecurityConfig(TokenBasedAuthenticationFilter authenticationFilter, UserDetailsService userService, CsrfTokenResponseHeaderBindingFilter csrfTokenResponseHeaderBindingFilter, TokenBasedAuthenticationEntryPoint customEntryPoint) {
+    public SecurityConfig(TokenBasedAuthenticationFilter authenticationFilter, UserDetailsService userService, TokenBasedAuthenticationEntryPoint customEntryPoint) {
         this.authenticationFilter = authenticationFilter;
         this.userService = userService;
-        this.csrfTokenResponseHeaderBindingFilter = csrfTokenResponseHeaderBindingFilter;
         this.customEntryPoint = customEntryPoint;
     }
 
@@ -46,13 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .regexMatchers(HttpMethod.GET, "/token.*").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(csrfTokenResponseHeaderBindingFilter, CsrfFilter.class)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-                .and().exceptionHandling().authenticationEntryPoint(customEntryPoint);
+                .and().exceptionHandling().authenticationEntryPoint(customEntryPoint)
+                .and().csrf().disable();
     }
 
     @Override
@@ -64,5 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean(initMethod = "init")
+    public TokenManager tokenManager() {
+        return new TokenManager();
     }
 }

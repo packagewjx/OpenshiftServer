@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TokenManager {
 
-    public static final int TOKEN_EXPIRE_SECOND = 300;
+    public static final int TOKEN_EXPIRE_SECOND = 600;
     private static final Logger logger = LoggerFactory.getLogger(TokenManager.class);
 
 
@@ -33,7 +33,7 @@ public class TokenManager {
      */
     public void init() {
         ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
-        service.scheduleAtFixedRate(new TokenUpdateRunnable(), 30, 30, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(new TokenUpdateRunnable(), TOKEN_EXPIRE_SECOND, 30, TimeUnit.SECONDS);
     }
 
     /**

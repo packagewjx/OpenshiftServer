@@ -14,4 +14,5 @@ public class ResultCode {
     public static final int OTHER = 1004;
     public static final int JSON_CONVERT_ERROR = 1005;
     public static final int BAD_CREDENTIAL = 1006;
+    public static final int BAD_TOKEN = 1007;
 }

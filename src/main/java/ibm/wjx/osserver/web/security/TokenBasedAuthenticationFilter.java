@@ -1,5 +1,9 @@
 package ibm.wjx.osserver.web.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ibm.wjx.osserver.constant.ResultCode;
+import ibm.wjx.osserver.constant.ResultMessage;
+import ibm.wjx.osserver.pojo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,8 @@ public class TokenBasedAuthenticationFilter extends GenericFilterBean {
     private TokenManager tokenManager;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * Header must contain the Token field.
@@ -59,7 +65,8 @@ public class TokenBasedAuthenticationFilter extends GenericFilterBean {
             } else {
                 logger.debug("Token {} invalid, sending error message", token);
                 HttpServletResponse response = (HttpServletResponse) servletResponse;
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Your token is expired or invalid");
+                response.getWriter().print(objectMapper.writeValueAsString(Result.newFailResult(null, ResultCode.BAD_TOKEN, ResultMessage.BAD_TOKEN)));
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         }

@@ -1,10 +1,8 @@
 package ibm.wjx.osserver;
 
 import ibm.wjx.osserver.config.SecurityConfig;
-import ibm.wjx.osserver.web.security.TokenManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -18,10 +16,5 @@ import org.springframework.context.annotation.Import;
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-    }
-
-    @Bean(initMethod = "init")
-    public TokenManager tokenManager() {
-        return new TokenManager();
     }
 }
