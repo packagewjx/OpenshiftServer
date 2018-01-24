@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * Create Date: 1/16/18
  *
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
- * Description:
+ * Description: This class only provide login for system:admin!
  */
 @RestController
 @RequestMapping("/token")

@@ -13,11 +13,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Abstract Base Class for a shell command, use template method to execute a command.
- * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
+ *
  * @param <DataType> The Return Object Type.
+ * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  */
 public abstract class BaseShellCommand<DataType> {
     public static final int RETURN_CODE_IO_EXCEPTION = -1000;
@@ -41,12 +43,14 @@ public abstract class BaseShellCommand<DataType> {
     /**
      * Get the command word array to construct a command, implement this to let base class to use to execute this command
      * using template method.
+     *
      * @return the command word array, in order.
      */
     protected abstract List<String> getCmdArray();
 
     /**
      * Execute the command using the environment variables provided by this method.
+     *
      * @return environment variables, format is "env_name=env_val"
      */
     protected abstract Set<String> getEnvs();
@@ -54,18 +58,24 @@ public abstract class BaseShellCommand<DataType> {
     /**
      * override this function to do something before command execute
      */
-    protected void beforeExecute() {}
+    protected void beforeExecute() {
+    }
 
     /**
      * override this function to do something after command executed.
      */
-    protected void afterExecute() {}
+    protected void afterExecute() {
+    }
 
     /**
      * override this function to do something after error occurred.
      */
     protected void afterError() {
+    }
 
+    protected Set<String> getSystemEnv() {
+        return System.getenv().entrySet().stream().parallel().
+                map(stringStringEntry -> stringStringEntry.getKey() + "=" + stringStringEntry.getValue()).collect(Collectors.toSet());
     }
 
     @Override
@@ -102,10 +112,9 @@ public abstract class BaseShellCommand<DataType> {
      * error output and return code will be the process error return code.
      * Attention:
      * <ul>
-     *     <li>Should not execute a long command using this function, this will run out of StringBuilder buffer space potentially.</li>
-     *     <li>Should not execute a command that requires stdin, or user input, just input command and output result.</li>
+     * <li>Should not execute a long command using this function, this will run out of StringBuilder buffer space potentially.</li>
+     * <li>Should not execute a command that requires stdin, or user input, just input command and output result.</li>
      * </ul>
-     *
      *
      * @return command result object, including return code, raw result string and parsed data object.
      */

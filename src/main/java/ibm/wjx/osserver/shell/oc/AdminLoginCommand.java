@@ -11,13 +11,13 @@ import java.util.List;
  * @author <a href="mailto:wu812730157@gmail.com">Wujunxian</a>
  * Description: ${Description}
  */
-public class LoginCommand extends BaseOcCommand<Boolean> {
+public class AdminLoginCommand extends BaseOcCommand<Boolean> {
     private static final Parser PARSER = new Parser();
     static {
-        logger = LoggerFactory.getLogger(LoginCommand.class);
+        logger = LoggerFactory.getLogger(AdminLoginCommand.class);
     }
 
-    public LoginCommand() {
+    public AdminLoginCommand() {
         super(PARSER);
     }
 

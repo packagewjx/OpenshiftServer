@@ -4,7 +4,6 @@ import ibm.wjx.osserver.shell.resultparser.RawStringParser;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Create Date: 12/21/17
@@ -54,8 +53,11 @@ public class StringCommand extends BaseShellCommand<String> {
 
     @Override
     protected List<String> getCmdArray() {
-        //TODO split the string so that it did not split "" and '\ '('\<space>')
-        return Arrays.stream(command.split(" ")).collect(Collectors.toList());
+        List<String> cmdArray = new ArrayList<>();
+        cmdArray.add("/bin/bash");
+        cmdArray.add("-c");
+        cmdArray.add(command);
+        return cmdArray;
     }
 
     @Override

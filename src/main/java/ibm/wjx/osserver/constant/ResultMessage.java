@@ -15,4 +15,5 @@ public class ResultMessage {
     public static final String CONVERT_FROM_JSON_ERROR = "Error while converting json to object";
     public static final String BAD_CREDENTIAL = "Your credential was wrong";
     public static final String BAD_TOKEN = "Your token was invalid or expired";
+    public static final String OTHER = "Unknown reason";
 }

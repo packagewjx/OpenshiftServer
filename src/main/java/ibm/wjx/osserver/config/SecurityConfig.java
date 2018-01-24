@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .regexMatchers("/login.*", "/user-logout.*").permitAll()
                 .regexMatchers(HttpMethod.GET, "/token.*").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -61,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean(initMethod = "init")
+    @Bean(initMethod = "init", destroyMethod = "destroy")
     public TokenManager tokenManager() {
         return new TokenManager();
     }

@@ -22,18 +22,23 @@ import java.util.concurrent.TimeUnit;
  */
 public class TokenManager {
 
-    public static final int TOKEN_EXPIRE_SECOND = 600;
+    private static final int TOKEN_EXPIRE_SECOND = 600;
     private static final Logger logger = LoggerFactory.getLogger(TokenManager.class);
 
 
     private Map<String, Token> tokenMap = new ConcurrentHashMap<>();
+    private ScheduledExecutorService service;
 
     /**
      * initialize a timer thread to update token periodicity
      */
     public void init() {
-        ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
+        service = Executors.newScheduledThreadPool(1);
         service.scheduleAtFixedRate(new TokenUpdateRunnable(), TOKEN_EXPIRE_SECOND, 30, TimeUnit.SECONDS);
+    }
+
+    public void destroy() {
+        service.shutdown();
     }
 
     /**
