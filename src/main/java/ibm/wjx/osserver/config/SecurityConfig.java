@@ -1,5 +1,6 @@
 package ibm.wjx.osserver.config;
 
+import ibm.wjx.osserver.web.security.CORSFilter;
 import ibm.wjx.osserver.web.security.TokenBasedAuthenticationEntryPoint;
 import ibm.wjx.osserver.web.security.TokenBasedAuthenticationFilter;
 import ibm.wjx.osserver.web.security.TokenManager;
@@ -29,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenBasedAuthenticationFilter authenticationFilter;
     private final UserDetailsService userService;
     private final TokenBasedAuthenticationEntryPoint customEntryPoint;
+    @Autowired
+    private CORSFilter corsFilter;
 
 
     @Autowired
@@ -46,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
                 .and().exceptionHandling().authenticationEntryPoint(customEntryPoint)
                 .and().csrf().disable();
